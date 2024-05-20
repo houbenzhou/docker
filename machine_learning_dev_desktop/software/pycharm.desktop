@@ -1,0 +1,17 @@
+[Desktop Entry]
+
+Type=Application
+
+Version=2020
+
+Name=pycharm
+
+Comment=Run iServer
+
+Icon=/root/software/pycharm/bin/pycharm.png
+
+Exec=sh /root/software/pycharm/bin/pycharm.sh
+
+Terminal=false
+
+Path=/root/software/pycharm
