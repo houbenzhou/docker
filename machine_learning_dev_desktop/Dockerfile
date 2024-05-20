@@ -21,6 +21,7 @@ RUN apt-get update -q && \
         procps \
         subversion \
         wget \
+        aria2c \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -58,3 +59,16 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
+
+USER root
+ENV SOFTWARE=/root/software
+RUN mkdir $SOFTWARE
+COPY software $SOFTWARE/
+
+RUN rm -rf /root/.pip/ && \
+    mkdir -p /root/.pip && \
+    mkdir -p /root/.jupyter && \
+    cp -r $SOFTWARE/pip.conf  /root/.pip && \
+    cp $SOFTWARE/jupyter_lab_config.py  /root/.jupyter  && \
+    cp $SOFTWARE/jupyter_server_config.json  /root/.jupyter && \
+    cp $SOFTWARE/pycharm.desktop  /usr/share/applications
