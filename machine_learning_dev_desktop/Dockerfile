@@ -1,7 +1,7 @@
 #  docker build  -f  Dockerfile_conda492_py38_ubuntu20 -t houbenzhou/conda:dockerfile_conda492_py38_ubuntu20_20210916  .
 
-FROM nvidia/cuda:11.7.1-cudnn8-devel-ubuntu22.04
-
+FROM kasmweb/core-cuda-focal:1.15.0-rolling
+USER root
 LABEL maintainer="Anaconda, Inc"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -21,7 +21,7 @@ RUN apt-get update -q && \
         procps \
         subversion \
         wget \
-        aria2c \
+        aria2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -60,15 +60,17 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
 
-USER root
-ENV SOFTWARE=/root/software
+USER kasm-user/
+ENV SOFTWARE=/kasm-user/software
 RUN mkdir $SOFTWARE
 COPY software $SOFTWARE/
 
-RUN rm -rf /root/.pip/ && \
-    mkdir -p /root/.pip && \
-    mkdir -p /root/.jupyter && \
-    cp -r $SOFTWARE/pip.conf  /root/.pip && \
-    cp $SOFTWARE/jupyter_lab_config.py  /root/.jupyter  && \
-    cp $SOFTWARE/jupyter_server_config.json  /root/.jupyter && \
+RUN rm -rf /kasm-user/.pip/ && \
+    mkdir -p /kasm-user/.pip && \
+    mkdir -p /kasm-user/.jupyter && \
+    cp -r $SOFTWARE/pip.conf  /kasm-user/.pip && \
+    cp $SOFTWARE/jupyter_lab_config.py  /kasm-user/.jupyter  && \
+    cp $SOFTWARE/jupyter_server_config.json  /kasm-user/.jupyter && \
     cp $SOFTWARE/pycharm.desktop  /usr/share/applications
+
+USER kasm-user/
